@@ -51,7 +51,7 @@ public class Main {
 //        System.out.println(WordsFile.WordRegistered("verb", "msg 3"));
 //        WordsFile.RegisterWord("BigTOS", "hihiws");
 
-        GatherStuff.beginCatchingWords("https://github.com/stleary/JSON-java");
+        GatherStuff.beginCatchingWords("https://namespace.media/");
 
 
     }

@@ -11,27 +11,17 @@ public class WordSender{
 
     public static void sendWord(ReadyEvent event, int i) {
 
-        try {
-            JSONArray nouns = WordsFile.GetRegisteredArray("noun");
+        JSONArray nouns = WordsFile.GetRegisteredArray("noun");
 
-                event.getJDA().getTextChannelById(Config.load("channel")).sendMessage(nouns.get(i).toString()).queue();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        event.getJDA().getTextChannelById(Config.load("channel")).sendMessage(nouns.get(i).toString()).queue();
 
     }
 
     public static void sendWord(MessageReactionAddEvent event, int i) {
 
-        try {
-            JSONArray nouns = WordsFile.GetRegisteredArray("noun");
+        JSONArray nouns = WordsFile.GetRegisteredArray("noun");
 
-            event.getJDA().getTextChannelById(Config.load("channel")).sendMessage(nouns.get(i).toString()).queue();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        event.getJDA().getTextChannelById(Config.load("channel")).sendMessage(nouns.get(i).toString()).queue();
 
     }
 

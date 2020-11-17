@@ -19,10 +19,11 @@ public class GatherStuff {
         int size = words.size();
 
         for (int i = 0; i < size; i++) {
-            if ((i++) == words.size()) {
+            if ((i+1) == words.size()) {
                 i = 0;
-                words = gatherWebsiteWords(WordsFile.lastRegisteredWord);
+                words = gatherWebsiteWords("https://en.wikipedia.org/wiki/" + WordsFile.lastRegisteredWord);
                 size = words.size();
+                System.out.println("Changed URL to - " + "https://en.wikipedia.org/wiki/" + WordsFile.lastRegisteredWord);
             }
             declareToS(words.get(i));
         }
