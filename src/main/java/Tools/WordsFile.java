@@ -64,6 +64,14 @@ public class WordsFile {
         }
     }
 
+    public static JSONArray GetRegisteredArray(String ToS) throws ParseException {
+        if (generalJO.containsKey(ToS)) {
+            JSONArray wordsTOS = (JSONArray) generalJO.get(ToS);
+            return wordsTOS;
+        }
+        return null;
+    }
+
     public static boolean WordRegistered(String ToS, String word) throws ParseException {
         if (generalJO.containsKey(ToS)) {
             JSONArray wordsTOS = (JSONArray) generalJO.get(ToS);
