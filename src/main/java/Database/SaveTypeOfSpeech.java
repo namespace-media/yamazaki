@@ -3,10 +3,10 @@ package Database;
 import java.io.*;
 import java.util.Properties;
 
-public class Score {
+public class SaveTypeOfSpeech {
 
     private static Properties properties;
-    static File file = new File("scores.properties");
+    static File file = new File("tos.properties");
 
     public static void init() throws IOException {
         properties = new Properties();
@@ -34,7 +34,7 @@ public class Score {
     public static void save(String hash, String name) {
         properties.put(hash, name);
         try {
-            properties.store(new FileOutputStream(file), "Yamazaki Word Scores");
+            properties.store(new FileOutputStream(file), "Yamazaki Word ToS");
         } catch (IOException e) {
             e.printStackTrace();
         }

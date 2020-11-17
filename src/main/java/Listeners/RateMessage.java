@@ -15,8 +15,8 @@ public class RateMessage extends ListenerAdapter {
         String[] words = event.getMessage().getContentRaw().split(" ");
 
         for (int i = 0; i < words.length; i++) {
-            if(!Score.propExist(words[i]) && words[i].length() > 0) {
-                Score.save(words[i], "0");
+            if(!SaveTypeOfSpeech.propExist(words[i]) && words[i].length() > 0) {
+                SaveTypeOfSpeech.save(words[i], "0");
             }
         }
 

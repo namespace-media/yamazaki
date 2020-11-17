@@ -4,8 +4,8 @@ import Commands.Processing.CommandHandler;
 import Commands.Processing.CommandListener;
 import Commands.checkRating;
 import Database.*;
-import Listeners.Punisher;
 import Listeners.RateMessage;
+import Testing.GatherStuff;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -21,10 +21,7 @@ public class Main {
     public static void main(String[] args) throws LoginException, IOException {
 
         Config.init();
-        Score.init();
-        NeutralCount.init();
-        BadCount.init();
-        Messages.init();
+        SaveTypeOfSpeech.init();
 
         builder = new JDABuilder(AccountType.BOT);
 
@@ -39,6 +36,9 @@ public class Main {
         builder.build();
 
         Commands();
+
+
+        GatherStuff.beginCatchingWords("https://en.wikipedia.org/wiki/Anime");
 
     }
 
