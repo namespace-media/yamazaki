@@ -16,8 +16,14 @@ public class GatherStuff {
     // Interface
     public static void beginCatchingWords(String url) throws IOException {
         List<String> words = gatherWebsiteWords(url);
+        int size = words.size();
 
-        for (int i = 0; i < words.size(); i++) {
+        for (int i = 0; i < size; i++) {
+            if ((i++) == words.size()) {
+                i = 0;
+                words = gatherWebsiteWords(WordsFile.lastRegisteredWord);
+                size = words.size();
+            }
             declareToS(words.get(i));
         }
     }

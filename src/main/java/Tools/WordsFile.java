@@ -7,12 +7,14 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.List;
+import java.util.Set;
 
 public class WordsFile {
 
     private static final File fileLocation = new File("words.json");
 
     private static JSONObject generalJO = new JSONObject();
+    public static String lastRegisteredWord = "";
 
     public static class InitialJsonStuff {
         public static void init() {
@@ -64,7 +66,7 @@ public class WordsFile {
         }
     }
 
-    public static JSONArray GetRegisteredArray(String ToS) throws ParseException {
+    public static JSONArray GetRegisteredArray(String ToS) {
         if (generalJO.containsKey(ToS)) {
             JSONArray wordsTOS = (JSONArray) generalJO.get(ToS);
             return wordsTOS;
@@ -99,6 +101,7 @@ public class WordsFile {
             WordsFile.InitialJsonStuff.SaveToFile();
 
             System.out.println("Registered Word! | " + useTOS + " -> " + useWord + "\n");
+            lastRegisteredWord = useWord;
         }
     }
 
