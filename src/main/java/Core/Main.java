@@ -5,6 +5,7 @@ import Commands.Processing.CommandListener;
 import Commands.checkRating;
 import Database.*;
 import Listeners.RateMessage;
+import Listeners.Ready;
 import Testing.GatherStuff;
 import Tools.WordsFile;
 import net.dv8tion.jda.api.AccountType;
@@ -28,21 +29,23 @@ public class Main {
         Config.init();
         SaveTypeOfSpeech.init();
 
+        BadCount.init();
+        NeutralCount.init();
+        Messages.init();
+
         builder = new JDABuilder(AccountType.BOT);
 
         builder.setStatus(OnlineStatus.IDLE);
         builder.setAutoReconnect(true);
-        builder.setActivity(Activity.playing("CARRION"));
+        builder.setActivity(Activity.playing("encrypt."));
 
         builder.setToken(Config.load("token"));
 
-        builder.addEventListeners(new RateMessage(), new CommandListener());
+        builder.addEventListeners(new RateMessage(), new CommandListener(), new Ready());
 
         builder.build();
 
         Commands();
-
-
 
         WordsFile.InitialJsonStuff.init();
 //        System.out.println(WordsFile.WordRegistered("verb", "msg 3"));

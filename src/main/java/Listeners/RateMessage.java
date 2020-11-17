@@ -1,6 +1,7 @@
 package Listeners;
 
 import Database.*;
+import Frontend.WordSender;
 import Tools.Rating;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -9,8 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class RateMessage extends ListenerAdapter {
 
+    public static int wordCount = 0;
+    public static String ToS;
+
     @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+    public void onMessageReceived(MessageReceivedEvent event) {
 
         String[] words = event.getMessage().getContentRaw().split(" ");
 
@@ -22,13 +26,14 @@ public class RateMessage extends ListenerAdapter {
 
         if(event.getTextChannel().getId().contains(Config.load("channel"))) {
             event.getMessage().addReaction("✅").and(event.getMessage().addReaction("❌")).queue();
+            wordCount++;
         }
 
         Messages.save(event.getMessageId(), event.getMessage().getContentRaw());
     }
 
     @Override
-    public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
 
         if(!event.getMember().getUser().isBot()) {
             if (event.getReactionEmote().getName().contains("✅")) {
@@ -39,6 +44,7 @@ public class RateMessage extends ListenerAdapter {
                     NeutralCount.save(upvoted[i], Rating.addNeutralScore(upvoted[i]));
                 }
 
+                WordSender.sendWord(event, wordCount);
             } else if (event.getReactionEmote().getName().contains("❌")) {
 
                 String[] downvoted = Messages.load(event.getMessageId()).split(" ");
@@ -47,6 +53,7 @@ public class RateMessage extends ListenerAdapter {
                     BadCount.save(downvoted[i], Rating.addBadScore(downvoted[i]));
                 }
 
+                WordSender.sendWord(event, wordCount);
             }
         }
 
