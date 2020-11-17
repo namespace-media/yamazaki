@@ -6,19 +6,24 @@ import Commands.checkRating;
 import Database.*;
 import Listeners.RateMessage;
 import Testing.GatherStuff;
+import Tools.WordsFile;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
 
     public static JDABuilder builder;
 
-    public static void main(String[] args) throws LoginException, IOException {
+    public static void main(String[] args) throws LoginException, IOException, ParseException {
 
         Config.init();
         SaveTypeOfSpeech.init();
@@ -38,7 +43,13 @@ public class Main {
         Commands();
 
 
-        GatherStuff.beginCatchingWords("https://en.wikipedia.org/wiki/Anime");
+
+        WordsFile.InitialJsonStuff.init();
+//        System.out.println(WordsFile.WordRegistered("verb", "msg 3"));
+//        WordsFile.RegisterWord("BigTOS", "hihiws");
+
+        GatherStuff.beginCatchingWords("https://github.com/stleary/JSON-java");
+
 
     }
 
