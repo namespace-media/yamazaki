@@ -37,7 +37,7 @@ public class Main {
 
         builder.setStatus(OnlineStatus.IDLE);
         builder.setAutoReconnect(true);
-        builder.setActivity(Activity.playing("encrypt."));
+        builder.setActivity(Activity.playing("Learning Human behaviour."));
 
         builder.setToken(Config.load("token"));
 
