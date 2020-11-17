@@ -20,12 +20,10 @@ public class GatherStuff {
         for (int i = 0; i < words.size(); i++) {
             declareToS(words.get(i));
         }
-
     }
 
 
     // Tools
-
     private static List<String> gatherWebsiteWords(String url) throws IOException {
         Document doc = getDoc(url);
         String allText = doc.text();
