@@ -1,5 +1,7 @@
 package Testing;
 
+import Tools.WordsFile;
+import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,10 +29,10 @@ public class GatherStuff {
     private static List<String> gatherWebsiteWords(String url) throws IOException {
         Document doc = getDoc(url);
         String allText = doc.text();
-        String[] splitText = allText.split("[ ][\\s]*");
+        String[] splitText = allText.split("[^A-Za-z0-9][\\s]*");
         List<String> allWords = new ArrayList<String>();
         for (int i = 0; i < splitText.length; i++) {
-            allWords.add(splitText[i].replaceAll("[^A-Za-z0-9]", ""));
+            allWords.add(splitText[i].replaceAll("[^A-Za-z0-9 ]", ""));
         }
         return allWords;
     }
@@ -38,9 +40,13 @@ public class GatherStuff {
     private static void declareToS(String word) throws IOException {
         List<String> wordsList = getTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "h3");
         for (int i = 0; i < wordsList.size(); i++) {
-            System.out.println(word + " -- " + wordsList.get(i));
+            String ToS = wordsList.get(i);
+            try {
+                WordsFile.RegisterWord(ToS, word);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        System.out.println("\n\n");
     }
 
     private static List<String> getTagsOfURL(String url, String tag) throws IOException {
