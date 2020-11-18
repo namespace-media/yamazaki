@@ -1,17 +1,12 @@
 package Commands;
 
-import Database.BadCount;
-import Database.NeutralCount;
 import Tools.JSONWordsDatabase;
-import Tools.Maths;
-import Tools.Scoring;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
-import java.text.DecimalFormat;
 
-public class checkRating implements Command{
+public class checkRating implements Command {
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -19,20 +14,20 @@ public class checkRating implements Command{
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(args.length > 0) {
+        if (args.length > 0) {
             String word = args[0];
 
 
-            double rating = JSONWordsDatabase.WordRating.getWordsRating(word);
+            double rating = JSONWordsDatabase.WordDetails.WordRating.GetWordsRating(word);
             System.out.println("rating - " + rating);
             if (rating == 0) {
                 event.getTextChannel().sendMessage(getNotSureEmbed(word).build()).queue();
             } else if (rating > 0.5) {
-                event.getTextChannel().sendMessage(getBadEmbed(word, (int) (rating*100)).build()).queue();
+                event.getTextChannel().sendMessage(getBadEmbed(word, (int) (rating * 100)).build()).queue();
             } else {
-                event.getTextChannel().sendMessage(getGoodEmbed(word, (int) (rating*100)).build()).queue();
+                event.getTextChannel().sendMessage(getGoodEmbed(word, (int) (rating * 100)).build()).queue();
             }
-        }else {
+        } else {
             event.getTextChannel().sendMessage("Please include a Word!").queue();
         }
     }
@@ -45,7 +40,7 @@ public class checkRating implements Command{
                 .setColor(Color.gray)
                 .addField("Bad Word!", "✅ = `" + word + "` is a Bad word", true)
                 .addField("Nah its fine!", "❌ = ``" + word + "`` is not a bad word", true)
-        .setFooter(word);
+                .setFooter(word);
 //                .setFooter("We are "  + percentage + "% sure that this word is a bad one!", null)
 
         return eb;
@@ -53,11 +48,12 @@ public class checkRating implements Command{
 
     private static EmbedBuilder getBadEmbed(String word, int percentage) {
         EmbedBuilder eb = new EmbedBuilder();
-                eb.addField("Rating for ``" + word + "``", "Confidence: "  + percentage + "%", false)
-                        .addField("❌ Bad Word ❌", "`" + word + "` was classified as a bad word by user votes! ", false)
-                        .addBlankField(false)
+        eb.addField("Rating for ``" + word + "``", "Confidence: " + percentage + "%", false)
+                .addField("❌ Bad Word ❌", "`" + word + "` was classified as a bad word by user votes! ", false)
+                .setFooter("Confidence: " + percentage + "%", null)
+                .addBlankField(false)
                 .setColor(Color.red)
-                .setFooter("Confidence: "  + percentage + "%", null)
+                .addField("❌ Bad Word ❌", "`" + word + "` was classified as a bad word by user votes! ", false)
                 .setAuthor("The users have decided!", null, null)
                 .addField("Bad Word!", "✅ = `" + word + "` is a Bad word", true)
                 .addField("Nah its fine!", "❌ = ``" + word + "`` is not a bad word", true)
@@ -68,7 +64,8 @@ public class checkRating implements Command{
 
     private static EmbedBuilder getGoodEmbed(String word, int percentage) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.addField("Rating for ``" + word + "``", "Confidence: "  + percentage + "%", false)
+        eb
+                .addField("Rating for ``" + word + "``", "Confidence: " + (100-percentage) + "%", false)
                 .addField("✅ Fine Word ✅", "`" + word + "` was classified as a harmless word by user votes!", false)
                 .addBlankField(false)
                 .setColor(Color.green)

@@ -1,17 +1,11 @@
 package Listeners;
 
-import Core.Main;
 import Database.*;
 import Frontend.WordSender;
 import Tools.JSONWordsDatabase;
-import Tools.Rating;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
 
 public class RateMessage extends ListenerAdapter {
 
@@ -59,6 +53,7 @@ public class RateMessage extends ListenerAdapter {
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
 
+        try {
         if(!event.getMember().getUser().isBot()) {
             if (event.getReactionEmote().getName().contains("❌")) {
 
@@ -66,7 +61,7 @@ public class RateMessage extends ListenerAdapter {
 
                 for (int i = 0; i < upvoted.length; i++) {
 //                    NeutralCount.save(upvoted[i], Rating.addNeutralScore(upvoted[i]));
-                    JSONWordsDatabase.WordRating.RateWord(upvoted[i].toLowerCase(), true);
+                    JSONWordsDatabase.WordDetails.WordRating.RateWord(upvoted[i].toLowerCase(), true);
                 }
 
                 WordSender.sendWord(event);
@@ -76,11 +71,14 @@ public class RateMessage extends ListenerAdapter {
 
                 for (int i = 0; i < downvoted.length; i++) {
 //                    BadCount.save(downvoted[i], Rating.addBadScore(downvoted[i]));
-                    JSONWordsDatabase.WordRating.RateWord(downvoted[i].toLowerCase(), false);
+                    JSONWordsDatabase.WordDetails.WordRating.RateWord(downvoted[i].toLowerCase(), false);
                 }
 
                 WordSender.sendWord(event);
             }
+        }
+        }catch (Exception e) {
+            return;
         }
 
     }

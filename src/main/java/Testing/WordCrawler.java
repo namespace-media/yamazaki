@@ -18,7 +18,7 @@ public class WordCrawler {
 
     // Interface
     public static void beginCatchingWords(String url) throws IOException {
-        if(url.equalsIgnoreCase("")) {
+        if (url.equalsIgnoreCase("")) {
             url = getRandomWiki();
         }
         List<String> words = gatherWebsiteWords(url);
@@ -26,10 +26,10 @@ public class WordCrawler {
         System.out.println("Beginning to catch words at: " + url);
 
         for (int i = 0; i < size; i++) {
-            if ((i+1) == words.size()) {
+            if ((i + 1) == words.size()) {
                 i = 0;
                 String word = JSONWordsDatabase.lastRegisteredWord;
-                if(word.equalsIgnoreCase("")) {
+                if (word.equalsIgnoreCase("")) {
                     System.out.println("[WARNING] Last word has been empty! Choosing a random Word...");
                 }
                 beginCatchingWords(getRandomWiki());
@@ -69,7 +69,8 @@ public class WordCrawler {
                 List<String> tags = Tags.getTags(word);
 
                 for (int j = 0; j < tags.size(); j++) {
-                    //JSONWordsDatabase.RegisterTags(ToS, word, tags.get(j));
+                    if (!tags.get(j).equalsIgnoreCase(""))
+                        JSONWordsDatabase.WordDetails.WordTagging.RegisterWordsTag(word, tags.get(j));
                 }
 
             } catch (ParseException e) {
@@ -86,11 +87,6 @@ public class WordCrawler {
         }
         return wordsList;
     }
-
-
-
-
-
 
 
     private static Document getDoc(String url) throws IOException {
