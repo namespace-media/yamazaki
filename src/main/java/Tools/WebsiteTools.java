@@ -24,4 +24,13 @@ public class WebsiteTools {
         return Jsoup.connect(url).get();
     }
 
+    public static List<String> getRawTagsOfURL(String url, String tag) throws IOException {
+        Elements links = getDoc(url).getElementsByTag(tag);
+        List<String> wordsList = new ArrayList<String>();
+        for (Element link : links) {
+            wordsList.add(link.toString());
+        }
+        return wordsList;
+    }
+
 }

@@ -1,6 +1,7 @@
 package Testing;
 
 import Tools.JSONWordsDatabase;
+import Tools.Tags;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
@@ -64,6 +65,13 @@ public class WordCrawler {
             String ToS = wordsList.get(i);
             try {
                 JSONWordsDatabase.RegisterWord(ToS, word);
+
+                List<String> tags = Tags.getTags(word);
+
+                for (int j = 0; j < tags.size(); j++) {
+                    //JSONWordsDatabase.RegisterTags(ToS, word, tags.get(j));
+                }
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
