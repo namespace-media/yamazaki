@@ -101,7 +101,7 @@ public class JSONWordsDatabase {
                 detailsContentOBJ.put("bad", 0);
                 detailsContentOBJ.put("neutral", 0);
                 detailsContentOBJ.put("tags", new JSONArray());
-                detailsOBJ.put(word, detailsContentOBJ);
+                detailsOBJ.put(useWord, detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
 
 
@@ -128,7 +128,7 @@ public class JSONWordsDatabase {
                 detailsContentOBJ.put("bad", (long) 0);
                 detailsContentOBJ.put("neutral", (long) 0);
                 detailsContentOBJ.put("tags", new JSONArray());
-                detailsOBJ.put(word, detailsContentOBJ);
+                detailsOBJ.put(word.toLowerCase(), detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
                 JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
@@ -159,7 +159,7 @@ public class JSONWordsDatabase {
                     System.out.println("4 - Word is bad! - Now is " + detailsContentOBJ.get("bad"));
                 }
 
-                detailsOBJ.put(word, detailsContentOBJ);
+                detailsOBJ.put(word.toLowerCase(), detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
                 JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
@@ -211,7 +211,7 @@ public class JSONWordsDatabase {
 
                 tagsArray.add(tag);
 
-                detailsOBJ.put(word, detailsContentOBJ);
+                detailsOBJ.put(word.toLowerCase(), detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
                 JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
