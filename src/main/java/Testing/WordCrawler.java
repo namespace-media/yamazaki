@@ -1,6 +1,7 @@
 package Testing;
 
 import Tools.JSONWordsDatabase;
+import Tools.Tags;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
@@ -42,7 +43,7 @@ public class WordCrawler {
     // Tools
 
     private static String getRandomWiki() {
-        JSONArray nounsArray = JSONWordsDatabase.WortRegister.GetRegisteredArray("noun");
+        JSONArray nounsArray = JSONWordsDatabase.GetRegisteredArray("noun");
         int rnd = new Random().nextInt(nounsArray.size());
         return "https://en.wikipedia.org/wiki/" + nounsArray.get(rnd);
     }
@@ -50,7 +51,7 @@ public class WordCrawler {
     private static List<String> gatherWebsiteWords(String url) throws IOException {
         Document doc = getDoc(url);
         String allText = doc.text();
-        String[] splitText = allText.split("[^A-Za-z][\\s]*");
+        String[] splitText = allText.split("[^A-Za-z0-9][\\s]*");
         List<String> allWords = new ArrayList<String>();
         for (int i = 0; i < splitText.length; i++) {
             allWords.add(splitText[i].replaceAll("[^A-Za-z0-9 ]", ""));
@@ -63,7 +64,14 @@ public class WordCrawler {
         for (int i = 0; i < wordsList.size(); i++) {
             String ToS = wordsList.get(i);
             try {
-                JSONWordsDatabase.WortRegister.RegisterWord(ToS, word);
+                JSONWordsDatabase.RegisterWord(ToS, word);
+
+                List<String> tags = Tags.getTags(word);
+
+                for (int j = 0; j < tags.size(); j++) {
+                    //JSONWordsDatabase.RegisterTags(ToS, word, tags.get(j));
+                }
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
