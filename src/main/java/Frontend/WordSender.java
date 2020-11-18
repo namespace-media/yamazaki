@@ -53,19 +53,19 @@ public class WordSender {
 
         switch (new Random().nextInt(4)) {
             case 0:
-                words = JSONWordsDatabase.WortRegister.GetRegisteredArray("noun");
+                words = JSONWordsDatabase.WordRegister.GetRegisteredArray("noun");
                 break;
             case 1:
-                words = JSONWordsDatabase.WortRegister.GetRegisteredArray("verb");
+                words = JSONWordsDatabase.WordRegister.GetRegisteredArray("verb");
                 break;
             case 2:
-                words = JSONWordsDatabase.WortRegister.GetRegisteredArray("adjective");
+                words = JSONWordsDatabase.WordRegister.GetRegisteredArray("adjective");
                 break;
             case 3:
-                words = JSONWordsDatabase.WortRegister.GetRegisteredArray("adverb");
+                words = JSONWordsDatabase.WordRegister.GetRegisteredArray("adverb");
                 break;
             default:
-                words = JSONWordsDatabase.WortRegister.GetRegisteredArray("unspecified");
+                words = JSONWordsDatabase.WordRegister.GetRegisteredArray("unspecified");
                 break;
         }
 

@@ -55,7 +55,7 @@ public class JSONWordsDatabase {
         }
     }
 
-    public static class WortRegister {
+    public static class WordRegister {
         public static JSONArray GetRegisteredArray(String ToS) {
             if (generalJO.containsKey(ToS)) {
                 JSONArray wordsTOS = (JSONArray) generalJO.get(ToS);

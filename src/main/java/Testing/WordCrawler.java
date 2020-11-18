@@ -43,7 +43,7 @@ public class WordCrawler {
     // Tools
 
     private static String getRandomWiki() {
-        JSONArray nounsArray = JSONWordsDatabase.WortRegister.GetRegisteredArray("noun");
+        JSONArray nounsArray = JSONWordsDatabase.WordRegister.GetRegisteredArray("noun");
         int rnd = new Random().nextInt(nounsArray.size());
         return "https://en.wikipedia.org/wiki/" + nounsArray.get(rnd);
     }
@@ -64,7 +64,7 @@ public class WordCrawler {
         for (int i = 0; i < wordsList.size(); i++) {
             String ToS = wordsList.get(i);
             try {
-                JSONWordsDatabase.WortRegister.RegisterWord(ToS, word);
+                JSONWordsDatabase.WordRegister.RegisterWord(ToS, word);
 
                 List<String> tags = Tags.getTags(word);
 
