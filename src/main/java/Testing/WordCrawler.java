@@ -35,7 +35,8 @@ public class WordCrawler {
                 beginCatchingWords(getRandomWiki());
                 break;
             }
-            declareToS(words.get(i));
+            if (!words.get(i).equalsIgnoreCase(""))
+                declareToS(words.get(i));
         }
     }
 
@@ -54,24 +55,56 @@ public class WordCrawler {
         String[] splitText = allText.split("[^A-Za-z0-9][\\s]*");
         List<String> allWords = new ArrayList<String>();
         for (int i = 0; i < splitText.length; i++) {
-            allWords.add(splitText[i].replaceAll("[^A-Za-z0-9 ]", ""));
+            allWords.add(splitText[i].replaceAll("[^A-Za-z]", ""));
         }
         return allWords;
     }
 
+//    private static void declareToS(String word) throws IOException {
+////        List<String> wordsList = getTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "h3");
+//        System.out.println("URL - https://www.google.com/search?&q=" + word.toLowerCase() + "+definition");
+//        List<String> wordsList = GetElementsByCSSQ("https://www.google.com/search?&q=" + word.toLowerCase() + "+definition", ".pgRvse.vdBwhd");
+//        System.out.println("HEHE - " + wordsList.toString());
+//            String ToS = wordsList.get(0);
+//        System.out.println("THIS IS - " + ToS);
+//            try {
+//                JSONWordsDatabase.WordRegister.RegisterWord(ToS, word);
+//
+//                List<String> tags = Tags.getTags(word);
+//
+//                for (int j = 0; j < tags.size(); j++) {
+//                    if (!tags.get(j).equalsIgnoreCase(""))
+//                        JSONWordsDatabase.WordDetails.WordTagging.RegisterWordsTag(word, tags.get(j));
+//                }
+//
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//    }
+
     private static void declareToS(String word) throws IOException {
-        List<String> wordsList = getTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "h3");
+//        List<String> wordsList = getTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "h3");
+        List<String> wordsList = GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .POS");
+        List<String> trademarksList = GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .REGISTERLAB");
+        for (int i = 0; i < trademarksList.size(); i++) {
+            if(trademarksList.get(i).equalsIgnoreCase("trademark"))
+                wordsList.add(trademarksList.get(i));
+        }
+        if (wordsList.size() == 0 || wordsList.toString().equalsIgnoreCase("[]")) {
+            wordsList.add("unidentified");
+        }
+
         for (int i = 0; i < wordsList.size(); i++) {
             String ToS = wordsList.get(i);
             try {
-                JSONWordsDatabase.WordRegister.RegisterWord(ToS, word);
+                JSONWordsDatabase.WordRegister.RegisterWord(ToS.replaceAll("[^A-Za-z]", ""), word);
 
                 List<String> tags = Tags.getTags(word);
 
-                for (int j = 0; j < tags.size(); j++) {
-                    if (!tags.get(j).equalsIgnoreCase(""))
-                        JSONWordsDatabase.WordDetails.WordTagging.RegisterWordsTag(word, tags.get(j));
-                }
+//                for (int j = 0; j < tags.size(); j++) {
+//                    if (!tags.get(j).equalsIgnoreCase(""))
+//                        JSONWordsDatabase.WordDetails.WordTagging.RegisterWordsTag(word, tags.get(j));
+//                }
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -79,7 +112,7 @@ public class WordCrawler {
         }
     }
 
-    private static List<String> getTagsOfURL(String url, String tag) throws IOException {
+    private static List<String> GetElementsByTag(String url, String tag) throws IOException {
         Elements links = getDoc(url).getElementsByTag(tag);
         List<String> wordsList = new ArrayList<String>();
         for (Element link : links) {
@@ -88,9 +121,26 @@ public class WordCrawler {
         return wordsList;
     }
 
+    private static List<String> GetElementsByCSSQ(String url, String cssQ) {
+        try {
+            Elements links = getDoc(url).select(cssQ);
+            List<String> wordsList = new ArrayList<String>();
+            for (Element link : links) {
+                wordsList.add(link.text());
+            }
+            return wordsList;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
 
     private static Document getDoc(String url) throws IOException {
-        return Jsoup.connect(url).get();
+        try {
+            return Jsoup.connect(url).get();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

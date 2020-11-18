@@ -10,6 +10,6 @@ public class Ready extends ListenerAdapter {
     @Override
     public void onReady(ReadyEvent event) {
         Main.mainJDA = event.getJDA();
-        WordSender.sendWord(event);
+//        WordSender.sendWord(event);
     }
 }

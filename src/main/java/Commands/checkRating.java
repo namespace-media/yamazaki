@@ -20,12 +20,12 @@ public class checkRating implements Command {
 
             double rating = JSONWordsDatabase.WordDetails.WordRating.GetWordsRating(word);
             System.out.println("rating - " + rating);
-            if (rating == 0) {
+            if (rating < 0  || rating > 100 || rating == 50) {
                 event.getTextChannel().sendMessage(getNotSureEmbed(word).build()).queue();
-            } else if (rating > 0.5) {
-                event.getTextChannel().sendMessage(getBadEmbed(word, (int) (rating * 100)).build()).queue();
+            } else if (rating > 50) {
+                event.getTextChannel().sendMessage(getBadEmbed(word, (int) rating).build()).queue();
             } else {
-                event.getTextChannel().sendMessage(getGoodEmbed(word, (int) (rating * 100)).build()).queue();
+                event.getTextChannel().sendMessage(getGoodEmbed(word, (int) rating).build()).queue();
             }
         } else {
             event.getTextChannel().sendMessage("Please include a Word!").queue();
@@ -38,8 +38,8 @@ public class checkRating implements Command {
                 .addField("❓ We are not sure yet ❓", "`" + word + "` could not yet be classified by user votes. ", false)
                 .addField("", "", false)
                 .setColor(Color.gray)
-                .addField("Bad Word!", "✅ = `" + word + "` is a Bad word", true)
-                .addField("Nah its fine!", "❌ = ``" + word + "`` is not a bad word", true)
+                .addField("All good!", "✅ = `" + word + "` is harmless", true)
+                .addField("Thats a bad word!", "❌ = ``" + word + "`` is a Bad word", true)
                 .setFooter(word);
 //                .setFooter("We are "  + percentage + "% sure that this word is a bad one!", null)
 
@@ -55,8 +55,8 @@ public class checkRating implements Command {
                 .setColor(Color.red)
                 .addField("❌ Bad Word ❌", "`" + word + "` was classified as a bad word by user votes! ", false)
                 .setAuthor("The users have decided!", null, null)
-                .addField("Bad Word!", "✅ = `" + word + "` is a Bad word", true)
-                .addField("Nah its fine!", "❌ = ``" + word + "`` is not a bad word", true)
+                .addField("All good!", "✅ = `" + word + "` is harmless", true)
+                .addField("Thats a bad word!", "❌ = ``" + word + "`` is a Bad word", true)
                 .setFooter(word);
 
         return eb;
@@ -70,8 +70,8 @@ public class checkRating implements Command {
                 .addBlankField(false)
                 .setColor(Color.green)
                 .setAuthor("The users have decided!", null, null)
-                .addField("Bad Word!", "✅ = `" + word + "` is a Bad word", true)
-                .addField("Nah its fine!", "❌ = ``" + word + "`` is not a bad word", true)
+                .addField("All good!", "✅ = `" + word + "` is harmless", true)
+                .addField("Thats a bad word!", "❌ = ``" + word + "`` is a Bad word", true)
                 .setFooter(word);
 
         return eb;

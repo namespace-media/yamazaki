@@ -13,11 +13,11 @@ import java.util.Random;
 
 public class WordSender {
 
-    public static void sendWord(ReadyEvent event) {
+    public static void sendWord(ReadyEvent event) throws java.lang.StackOverflowError {
         String word = getRandomWord();
         if (word == null){
-            sendWord(event);
-            return;
+                sendWord(event);
+                return;
         }
 
         event.getJDA().getTextChannelById(Config.load("channel")).sendMessage(getEmbed(word).build()).queue();
@@ -37,8 +37,8 @@ public class WordSender {
     private static EmbedBuilder getEmbed(String word) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setDescription("🤔 Is ``" + word + "`` a \"bad word\"?\n\n🌟 Vote and get your reward!")
-                .addField("Bad Word!", "✅ = `" + word + "` is a Bad word", true)
-                .addField("Nah its fine!", "❌ = ``" + word + "`` is not a bad word", true)
+                .addField("All good!", "✅ = `" + word + "` is harmless", true)
+                .addField("Thats a bad word!", "❌ = ``" + word + "`` is a Bad word", true)
                 .setColor(Color.CYAN)
                 .setFooter(word, null)
                 .setThumbnail(Main.mainJDA.getSelfUser().getAvatarUrl())
@@ -48,7 +48,7 @@ public class WordSender {
         return eb;
     }
 
-    private static String getRandomWord() {
+    private static String getRandomWord() throws java.lang.StackOverflowError {
         JSONArray words;
 
         switch (new Random().nextInt(4)) {

@@ -61,7 +61,7 @@ public class RateMessage extends ListenerAdapter {
 
                 for (int i = 0; i < upvoted.length; i++) {
 //                    NeutralCount.save(upvoted[i], Rating.addNeutralScore(upvoted[i]));
-                    JSONWordsDatabase.WordDetails.WordRating.RateWord(upvoted[i].toLowerCase(), true);
+                    JSONWordsDatabase.WordDetails.WordRating.RateWord(upvoted[i].toLowerCase(), false);
                 }
 
                 WordSender.sendWord(event);
@@ -71,7 +71,7 @@ public class RateMessage extends ListenerAdapter {
 
                 for (int i = 0; i < downvoted.length; i++) {
 //                    BadCount.save(downvoted[i], Rating.addBadScore(downvoted[i]));
-                    JSONWordsDatabase.WordDetails.WordRating.RateWord(downvoted[i].toLowerCase(), false);
+                    JSONWordsDatabase.WordDetails.WordRating.RateWord(downvoted[i].toLowerCase(), true);
                 }
 
                 WordSender.sendWord(event);

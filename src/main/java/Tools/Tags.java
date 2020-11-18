@@ -38,13 +38,13 @@ public class Tags {
             }
         }
 
-        System.out.println(word + " {");
-        for (int i = 0; i < parsedTags.size(); i++) {
-            if(!parsedTags.get(i).isEmpty()) {
-                System.out.println("    " + parsedTags.get(i));
-            }
-        }
-        System.out.println("}");
+//        System.out.println(word + " {");
+//        for (int i = 0; i < parsedTags.size(); i++) {
+//            if(!parsedTags.get(i).isEmpty()) {
+//                System.out.println("    " + parsedTags.get(i));
+//            }
+//        }
+//        System.out.println("}");
 
         return parsedTags;
     }

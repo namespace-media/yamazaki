@@ -80,11 +80,12 @@ public class JSONWordsDatabase {
             String useWord = word.toLowerCase();
             JSONObject detailsOBJ = new JSONObject();
             JSONObject detailsContentOBJ = new JSONObject();
-            if (useTOS.contains("your search did not return any results"))
-                useTOS = "unspecified";
 
             if (generalJO.get("details") != null)
                 detailsOBJ = (JSONObject) generalJO.get("details");
+
+            if (useTOS.equalsIgnoreCase(""))
+                return;
 
             if (!WordRegistered(useTOS, useWord)) {
                 JSONArray wordsTOS = new JSONArray();
@@ -123,9 +124,7 @@ public class JSONWordsDatabase {
             detailsOBJ = (JSONObject) generalJO.get("details");
             if (detailsOBJ.containsKey(word)) {
                 detailsContentOBJ = (JSONObject) detailsOBJ.get(word);
-                System.out.println("1 - Word details does exist!");
             } else {
-                System.out.println("2 - Word details didn't exist!");
                 detailsContentOBJ.put("bad", (long) 0);
                 detailsContentOBJ.put("neutral", (long) 0);
                 detailsContentOBJ.put("tags", new JSONArray());
@@ -165,13 +164,13 @@ public class JSONWordsDatabase {
                 JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
 
-            public static double GetWordsRating(String word) {
+            public static long GetWordsRating(String word) {
                 try {
                     JSONObject detailContentOBJ = GetDetailsContent(word);
 
-                    Long neutral = (Long) detailContentOBJ.get("neutral");
-                    Long bad = (Long) detailContentOBJ.get("bad");
-                    double overall = neutral + bad;
+                    long neutral = (Long) detailContentOBJ.get("neutral");
+                    long bad = (Long) detailContentOBJ.get("bad");
+                    long overall = neutral + bad;
                     System.out.println("neutral - " + neutral);
                     System.out.println("bad - " + bad);
                     System.out.println("overall - " + overall);
@@ -181,21 +180,22 @@ public class JSONWordsDatabase {
                     if (overall == 0)
                         return 0;
 
-                    double calced = 1.0 / overall;
+                    if (bad == 0 && neutral > 0)
+                        return 0;
 
-                    return calced;
+                    return (100 / overall) * bad;
                 } catch (ClassCastException e) {
                     return 0;
                 }
             }
         }
 
-
         public static class WordTagging {
+            static JSONObject detailsContentOBJ = new JSONObject();
 
             private static boolean AlreadyGotTag(String word, String tag) {
-                JSONObject detailsContentOBJ = GetDetailsContent(word);
                 JSONObject detailsOBJ;
+                detailsContentOBJ = GetDetailsContent(word);
                 JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
                 return tagsArray.contains(tag);
             }
@@ -205,7 +205,6 @@ public class JSONWordsDatabase {
                     return;
                 if(AlreadyGotTag(word, tag))
                     return;
-                JSONObject detailsContentOBJ = GetDetailsContent(word);
                 JSONObject detailsOBJ;
                 JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
                 detailsOBJ = (JSONObject) generalJO.get("details");
@@ -219,8 +218,7 @@ public class JSONWordsDatabase {
 
             public static JSONArray GetWordsTags(String word) {
                 try {
-                    JSONObject detailContentOBJ = GetDetailsContent(word);
-                    JSONArray tagsArray = (JSONArray) detailContentOBJ.get("tags");
+                    JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
 
                     if(tagsArray == null)
                         return new JSONArray();
