@@ -44,7 +44,7 @@ public class Tags {
                 System.out.println("    " + parsedTags.get(i));
             }
         }
-        System.out.println("}\n\n");
+        System.out.println("}");
 
         return parsedTags;
     }
