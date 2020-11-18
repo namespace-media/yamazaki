@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class RateMessage extends ListenerAdapter {
 
-    public static int wordCount = 1;
     public static String ToS;
 
     /*@Override
@@ -48,7 +47,6 @@ public class RateMessage extends ListenerAdapter {
 
         if(event.getTextChannel().getId().contains(Config.load("channel"))) {
             event.getMessage().addReaction("✅").and(event.getMessage().addReaction("❌")).queue();
-            wordCount++;
         }
 
         Messages.save(event.getMessageId(), event.getMessage().getEmbeds().get(0).getFooter().getText());
@@ -58,7 +56,7 @@ public class RateMessage extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
 
         if(!event.getMember().getUser().isBot()) {
-            if (event.getReactionEmote().getName().contains("✅")) {
+            if (event.getReactionEmote().getName().contains("❌")) {
 
                 String[] upvoted = Messages.load(event.getMessageId()).split(" ");
 
@@ -66,8 +64,8 @@ public class RateMessage extends ListenerAdapter {
                     NeutralCount.save(upvoted[i], Rating.addNeutralScore(upvoted[i]));
                 }
 
-                WordSender.sendWord(event, wordCount);
-            } else if (event.getReactionEmote().getName().contains("❌")) {
+                WordSender.sendWord(event);
+            } else if (event.getReactionEmote().getName().contains("✅")) {
 
                 String[] downvoted = Messages.load(event.getMessageId()).split(" ");
 
@@ -75,7 +73,7 @@ public class RateMessage extends ListenerAdapter {
                     BadCount.save(downvoted[i], Rating.addBadScore(downvoted[i]));
                 }
 
-                WordSender.sendWord(event, wordCount);
+                WordSender.sendWord(event);
             }
         }
 

@@ -1,6 +1,6 @@
 package Testing;
 
-import Tools.WordsFile;
+import Tools.JSONWordsDatabase;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
@@ -27,7 +27,7 @@ public class GatherStuff {
         for (int i = 0; i < size; i++) {
             if ((i+1) == words.size()) {
                 i = 0;
-                String word = WordsFile.lastRegisteredWord;
+                String word = JSONWordsDatabase.lastRegisteredWord;
                 if(word.equalsIgnoreCase("")) {
                     System.out.println("[WARNING] Last word has been empty! Choosing a random Word...");
                 }
@@ -42,7 +42,7 @@ public class GatherStuff {
     // Tools
 
     private static String getRandomWiki() {
-        JSONArray nounsArray = WordsFile.GetRegisteredArray("noun");
+        JSONArray nounsArray = JSONWordsDatabase.GetRegisteredArray("noun");
         int rnd = new Random().nextInt(nounsArray.size());
         return "https://en.wikipedia.org/wiki/" + nounsArray.get(rnd);
     }
@@ -63,7 +63,7 @@ public class GatherStuff {
         for (int i = 0; i < wordsList.size(); i++) {
             String ToS = wordsList.get(i);
             try {
-                WordsFile.RegisterWord(ToS, word);
+                JSONWordsDatabase.RegisterWord(ToS, word);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

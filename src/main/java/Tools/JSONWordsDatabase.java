@@ -6,10 +6,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.util.List;
-import java.util.Set;
 
-public class WordsFile {
+public class JSONWordsDatabase {
 
     private static final File fileLocation = new File("words.json");
 
@@ -98,7 +96,7 @@ public class WordsFile {
             }
             wordsTOS.add(useWord);
             generalJO.put(useTOS, wordsTOS);
-            WordsFile.InitialJsonStuff.SaveToFile();
+            JSONWordsDatabase.InitialJsonStuff.SaveToFile();
 
             System.out.println("Registered Word! | " + useTOS + " -> " + useWord + "\n");
             lastRegisteredWord = useWord;

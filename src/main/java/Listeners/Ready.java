@@ -1,5 +1,6 @@
 package Listeners;
 
+import Core.Main;
 import Frontend.WordSender;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -10,6 +11,7 @@ public class Ready extends ListenerAdapter {
 
     @Override
     public void onReady(ReadyEvent event) {
-        WordSender.sendWord(event, RateMessage.wordCount);
+        Main.mainJDA = event.getJDA();
+        WordSender.sendWord(event);
     }
 }
