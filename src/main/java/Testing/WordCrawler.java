@@ -2,6 +2,8 @@ package Testing;
 
 import Tools.JSONWordsDatabase;
 import Tools.Tags;
+import Tools.WebsiteTools;
+import net.dv8tion.jda.internal.entities.WebhookImpl;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
@@ -50,7 +52,7 @@ public class WordCrawler {
     }
 
     private static List<String> gatherWebsiteWords(String url) throws IOException {
-        Document doc = getDoc(url);
+        Document doc = WebsiteTools.getDoc(url);
         String allText = doc.text();
         String[] splitText = allText.split("[^A-Za-z0-9][\\s]*");
         List<String> allWords = new ArrayList<String>();
@@ -84,8 +86,8 @@ public class WordCrawler {
 
     private static void declareToS(String word) throws IOException {
 //        List<String> wordsList = getTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "h3");
-        List<String> wordsList = GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .POS");
-        List<String> trademarksList = GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .REGISTERLAB");
+        List<String> wordsList = WebsiteTools.GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .POS");
+        List<String> trademarksList = WebsiteTools.GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .REGISTERLAB");
         for (int i = 0; i < trademarksList.size(); i++) {
             if(trademarksList.get(i).equalsIgnoreCase("trademark"))
                 wordsList.add(trademarksList.get(i));
@@ -109,37 +111,6 @@ public class WordCrawler {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private static List<String> GetElementsByTag(String url, String tag) throws IOException {
-        Elements links = getDoc(url).getElementsByTag(tag);
-        List<String> wordsList = new ArrayList<String>();
-        for (Element link : links) {
-            wordsList.add(link.text());
-        }
-        return wordsList;
-    }
-
-    private static List<String> GetElementsByCSSQ(String url, String cssQ) {
-        try {
-            Elements links = getDoc(url).select(cssQ);
-            List<String> wordsList = new ArrayList<String>();
-            for (Element link : links) {
-                wordsList.add(link.text());
-            }
-            return wordsList;
-        } catch (Exception e) {
-            return new ArrayList<>();
-        }
-    }
-
-
-    private static Document getDoc(String url) throws IOException {
-        try {
-            return Jsoup.connect(url).get();
-        } catch (Exception e) {
-            return null;
         }
     }
 

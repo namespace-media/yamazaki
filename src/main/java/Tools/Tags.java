@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Tools.WebsiteTools.getRawTagsOfURL;
-import static Tools.WebsiteTools.getTagsOfURL;
 
 public class Tags {
 
     public static List<String> getTags(String word) throws IOException {
 
-        List<String> wordsList = getTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "li");
+        List<String> wordsList = WebsiteTools.GetElementsByTag("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "li");
 
         List<String> aRawList = getRawTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "li");
         List<String> bRawList = getRawTagsOfURL("http://wordnetweb.princeton.edu/perl/webwn?s=" + word, "li");
