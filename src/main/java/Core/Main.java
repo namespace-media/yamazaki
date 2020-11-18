@@ -4,6 +4,7 @@ import Commands.Processing.CommandHandler;
 import Commands.Processing.CommandListener;
 import Commands.checkRating;
 import Database.*;
+import Frontend.WordSender;
 import Listeners.RateMessage;
 import Listeners.Ready;
 import Testing.GatherStuff;
@@ -33,6 +34,8 @@ public class Main {
         NeutralCount.init();
         Messages.init();
 
+        WordsFile.InitialJsonStuff.init();
+
         builder = new JDABuilder(AccountType.BOT);
 
         builder.setStatus(OnlineStatus.IDLE);
@@ -41,17 +44,12 @@ public class Main {
 
         builder.setToken(Config.load("token"));
 
-        builder.addEventListeners(new RateMessage(), new CommandListener(), new Ready());
+        builder.addEventListeners(new Ready(), new RateMessage(), new CommandListener());
 
         builder.build();
 
         Commands();
-
-        WordsFile.InitialJsonStuff.init();
-//        System.out.println(WordsFile.WordRegistered("verb", "msg 3"));
-//        WordsFile.RegisterWord("BigTOS", "hihiws");
-
-        GatherStuff.beginCatchingWords("https://namespace.media/");
+        GatherStuff.beginCatchingWords("");
 
 
     }

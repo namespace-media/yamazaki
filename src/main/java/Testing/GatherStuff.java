@@ -1,6 +1,7 @@
 package Testing;
 
 import Tools.WordsFile;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,20 +11,28 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GatherStuff {
 
     // Interface
     public static void beginCatchingWords(String url) throws IOException {
+        if(url.equalsIgnoreCase("")) {
+            url = getRandomWiki();
+        }
         List<String> words = gatherWebsiteWords(url);
         int size = words.size();
+        System.out.println("Beginning to catch words at: " + url);
 
         for (int i = 0; i < size; i++) {
             if ((i+1) == words.size()) {
                 i = 0;
-                words = gatherWebsiteWords("https://en.wikipedia.org/wiki/" + WordsFile.lastRegisteredWord);
-                size = words.size();
-                System.out.println("Changed URL to - " + "https://en.wikipedia.org/wiki/" + WordsFile.lastRegisteredWord);
+                String word = WordsFile.lastRegisteredWord;
+                if(word.equalsIgnoreCase("")) {
+                    System.out.println("[WARNING] Last word has been empty! Choosing a random Word...");
+                }
+                beginCatchingWords(getRandomWiki());
+                break;
             }
             declareToS(words.get(i));
         }
@@ -31,6 +40,13 @@ public class GatherStuff {
 
 
     // Tools
+
+    private static String getRandomWiki() {
+        JSONArray nounsArray = WordsFile.GetRegisteredArray("noun");
+        int rnd = new Random().nextInt(nounsArray.size());
+        return "https://en.wikipedia.org/wiki/" + nounsArray.get(rnd);
+    }
+
     private static List<String> gatherWebsiteWords(String url) throws IOException {
         Document doc = getDoc(url);
         String allText = doc.text();

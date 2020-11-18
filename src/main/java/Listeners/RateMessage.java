@@ -3,6 +3,7 @@ package Listeners;
 import Database.*;
 import Frontend.WordSender;
 import Tools.Rating;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -10,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class RateMessage extends ListenerAdapter {
 
-    public static int wordCount = 0;
+    public static int wordCount = 1;
     public static String ToS;
 
-    @Override
+    /*@Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
         String[] words = event.getMessage().getContentRaw().split(" ");
@@ -30,6 +31,27 @@ public class RateMessage extends ListenerAdapter {
         }
 
         Messages.save(event.getMessageId(), event.getMessage().getContentRaw());
+    }*/
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if(event.getMessage().getEmbeds().size() != 1)
+            return;
+
+        String[] words = event.getMessage().getEmbeds().get(0).getFooter().getText().split(" ");
+
+        for (int i = 0; i < words.length; i++) {
+            if(!SaveTypeOfSpeech.propExist(words[i]) && words[i].length() > 0) {
+                SaveTypeOfSpeech.save(words[i], "0");
+            }
+        }
+
+        if(event.getTextChannel().getId().contains(Config.load("channel"))) {
+            event.getMessage().addReaction("✅").and(event.getMessage().addReaction("❌")).queue();
+            wordCount++;
+        }
+
+        Messages.save(event.getMessageId(), event.getMessage().getEmbeds().get(0).getFooter().getText());
     }
 
     @Override
