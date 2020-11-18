@@ -2,4 +2,4 @@
 .class
 *.json
 words.json
-target
+target/
