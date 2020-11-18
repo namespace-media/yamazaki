@@ -112,7 +112,7 @@ public class JSONWordsDatabase {
         }
     }
 
-    public static class WordRating {
+    public static class WordDetails {
         private static JSONObject GetDetailsContent(String word) {
             JSONObject detailsOBJ = new JSONObject();
             JSONObject detailsContentOBJ = new JSONObject();
@@ -136,58 +136,102 @@ public class JSONWordsDatabase {
             return detailsContentOBJ;
         }
 
-        public static void RateWord(String word, boolean neutral) {
-            if (generalJO.get("details") == null)
-                return;
-            JSONObject detailsContentOBJ = GetDetailsContent(word);
-            JSONObject detailsOBJ = new JSONObject();
-            detailsOBJ = (JSONObject) generalJO.get("details");
+        public static class WordRating {
 
-            if (neutral) {
-                System.out.println("3 - Word is neutral!");
-                Long neutralINT = (Long) detailsContentOBJ.get("neutral");
-                System.out.println("4 - Word is neutral! - Was " + neutralINT);
-                neutralINT++;
-                detailsContentOBJ.put("neutral", neutralINT);
-                System.out.println("4 - Word is neutral! - Now is " + detailsContentOBJ.get("neutral"));
-            } else {
-                Long badINT = (Long) detailsContentOBJ.get("bad");
-                System.out.println("4 - Word is bad! - Was " + badINT);
-                badINT++;
-                detailsContentOBJ.put("bad", badINT);
-                System.out.println("4 - Word is bad! - Now is " + detailsContentOBJ.get("bad"));
+            public static void RateWord(String word, boolean neutral) {
+                if (generalJO.get("details") == null)
+                    return;
+                JSONObject detailsContentOBJ = GetDetailsContent(word);
+                JSONObject detailsOBJ = new JSONObject();
+                detailsOBJ = (JSONObject) generalJO.get("details");
+
+                if (neutral) {
+                    System.out.println("3 - Word is neutral!");
+                    Long neutralINT = (Long) detailsContentOBJ.get("neutral");
+                    System.out.println("4 - Word is neutral! - Was " + neutralINT);
+                    neutralINT++;
+                    detailsContentOBJ.put("neutral", neutralINT);
+                    System.out.println("4 - Word is neutral! - Now is " + detailsContentOBJ.get("neutral"));
+                } else {
+                    Long badINT = (Long) detailsContentOBJ.get("bad");
+                    System.out.println("4 - Word is bad! - Was " + badINT);
+                    badINT++;
+                    detailsContentOBJ.put("bad", badINT);
+                    System.out.println("4 - Word is bad! - Now is " + detailsContentOBJ.get("bad"));
+                }
+
+                detailsOBJ.put(word, detailsContentOBJ);
+                generalJO.put("details", detailsOBJ);
+                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
 
-            detailsOBJ.put(word, detailsContentOBJ);
-            generalJO.put("details", detailsOBJ);
-            JSONWordsDatabase.InitialJsonStuff.SaveToFile();
-        }
+            public static double GetWordsRating(String word) {
+                try {
+                    JSONObject detailContentOBJ = GetDetailsContent(word);
 
-        public static double getWordsRating(String word) {
-            try {
-                JSONObject detailContentOBJ = GetDetailsContent(word);
-
-                Long neutral = (Long) detailContentOBJ.get("neutral");
-                Long bad = (Long) detailContentOBJ.get("bad");
-                double overall = neutral + bad;
-                System.out.println("neutral - " + neutral);
-                System.out.println("bad - " + bad);
-                System.out.println("overall - " + overall);
+                    Long neutral = (Long) detailContentOBJ.get("neutral");
+                    Long bad = (Long) detailContentOBJ.get("bad");
+                    double overall = neutral + bad;
+                    System.out.println("neutral - " + neutral);
+                    System.out.println("bad - " + bad);
+                    System.out.println("overall - " + overall);
 
 
 
-                if (overall == 0)
+                    if (overall == 0)
+                        return 0;
+
+                    double calced = 1.0 / overall;
+
+                    return calced;
+                } catch (ClassCastException e) {
                     return 0;
-
-                double calced = 1.0 / overall;
-
-                return calced;
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-                System.out.println("ne");
-                return 0;
+                }
             }
         }
+
+
+        public static class WordTagging {
+
+            private static boolean AlreadyGotTag(String word, String tag) {
+                JSONObject detailsContentOBJ = GetDetailsContent(word);
+                JSONObject detailsOBJ;
+                JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
+                return tagsArray.contains(tag);
+            }
+
+            public static void RegisterWordsTag(String word, String tag) {
+                if (generalJO.get("details") == null)
+                    return;
+                if(AlreadyGotTag(word, tag))
+                    return;
+                JSONObject detailsContentOBJ = GetDetailsContent(word);
+                JSONObject detailsOBJ;
+                JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
+                detailsOBJ = (JSONObject) generalJO.get("details");
+
+                tagsArray.add(tag);
+
+                detailsOBJ.put(word, detailsContentOBJ);
+                generalJO.put("details", detailsOBJ);
+                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
+            }
+
+            public static JSONArray GetWordsTags(String word) {
+                try {
+                    JSONObject detailContentOBJ = GetDetailsContent(word);
+                    JSONArray tagsArray = (JSONArray) detailContentOBJ.get("tags");
+
+                    if(tagsArray == null)
+                        return new JSONArray();
+
+                    return tagsArray;
+                } catch (ClassCastException e) {
+                    return new JSONArray();
+                }
+            }
+        }
+
     }
 
 

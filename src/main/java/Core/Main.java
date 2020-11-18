@@ -47,7 +47,7 @@ public class Main {
         builder.build();
 
         Commands();
-//        WordCrawler.beginCatchingWords("http://namespace.media/");
+        WordCrawler.beginCatchingWords("http://namespace.media/");
 
 
     }
