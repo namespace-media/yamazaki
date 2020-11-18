@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GatherStuff {
+public class WordCrawler {
 
     // Interface
     public static void beginCatchingWords(String url) throws IOException {

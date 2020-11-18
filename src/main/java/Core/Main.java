@@ -6,7 +6,7 @@ import Commands.checkRating;
 import Database.*;
 import Listeners.RateMessage;
 import Listeners.Ready;
-import Testing.GatherStuff;
+import Testing.WordCrawler;
 import Tools.JSONWordsDatabase;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
@@ -47,7 +47,7 @@ public class Main {
         builder.build();
 
         Commands();
-        GatherStuff.beginCatchingWords("");
+        WordCrawler.beginCatchingWords("");
 
 
     }
