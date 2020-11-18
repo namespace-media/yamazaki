@@ -6,6 +6,7 @@ import Commands.checkRating;
 import Database.*;
 import Listeners.RateMessage;
 import Listeners.Ready;
+import Listeners.SentenceListener;
 import Testing.WordCrawler;
 import Tools.JSONWordsDatabase;
 import net.dv8tion.jda.api.AccountType;
@@ -42,7 +43,7 @@ public class Main {
 
         builder.setToken(Config.load("token"));
 
-        builder.addEventListeners(new Ready(), new RateMessage(), new CommandListener());
+        builder.addEventListeners(new Ready(), new RateMessage(), new CommandListener(), new SentenceListener());
 
         builder.build();
 

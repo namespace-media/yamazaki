@@ -107,7 +107,7 @@ public class JSONWordsDatabase {
 
                 JSONWordsDatabase.InitialJsonStuff.SaveToFile();
 
-                System.out.println("Registered Word! | " + useTOS + " -> " + useWord + "\n");
+                System.out.println("Registered Word! | " + useWord + "  ->   " + useTOS);
                 lastRegisteredWord = useWord;
             }
         }
@@ -218,6 +218,7 @@ public class JSONWordsDatabase {
 
             public static JSONArray GetWordsTags(String word) {
                 try {
+                    detailsContentOBJ = GetDetailsContent(word);
                     JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
 
                     if(tagsArray == null)

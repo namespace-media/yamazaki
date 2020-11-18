@@ -3,13 +3,9 @@ package Testing;
 import Tools.JSONWordsDatabase;
 import Tools.Tags;
 import Tools.WebsiteTools;
-import net.dv8tion.jda.internal.entities.WebhookImpl;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,10 +99,10 @@ public class WordCrawler {
 
                 List<String> tags = Tags.getTags(word);
 
-//                for (int j = 0; j < tags.size(); j++) {
-//                    if (!tags.get(j).equalsIgnoreCase(""))
-//                        JSONWordsDatabase.WordDetails.WordTagging.RegisterWordsTag(word, tags.get(j));
-//                }
+                for (int j = 0; j < tags.size(); j++) {
+                    if (!tags.get(j).equalsIgnoreCase(""))
+                        JSONWordsDatabase.WordDetails.WordTagging.RegisterWordsTag(word, tags.get(j));
+                }
 
             } catch (ParseException e) {
                 e.printStackTrace();
