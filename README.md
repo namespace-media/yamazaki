@@ -5,8 +5,8 @@ It's main purpose is, to learn basic english language and to build logic sentenc
 # Research
 To build up a reliable Database of Words, the AI scans through semi-random [Wikipedia](https://en.wikipedia.org/) articles and sorts every word by their type of speech.
 An explanation of these functions can be found here:
-- [Scanning through Wikipedia articles](https://github.com/namespace-media/yamazaki)
-- [Sorting words by type of speech](https://github.com/namespace-media/yamazaki)
+- [Scanning through Wikipedia articles](https://github.com/namespace-media/yamazaki#word-collector)
+- [Sorting words by type of speech](https://github.com/namespace-media/yamazaki#sorting-words-by-type-of-speech)
 
 ## Word Rating System (WRS)
 Scores are important for an AI to know the meaning and strength of a word or phrase. To achieve a score like this, we're using [Discord](https://discord.com) to let users rate random words,
