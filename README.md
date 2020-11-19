@@ -21,7 +21,7 @@ This Process is repeated infinitly and already builds up a big database in a few
 
 ## Sorting words by type of speech
 Everytime, a new word is found, it is searched up on a [dictionary](https://www.ldoceonline.com/dictionary/), which shows the available types.
-Then, every word is sorted by "noun", "verb", "adjective" or "adverb". Names and other words will be categorized with "undefined".
+Then, every word is sorted by "noun", "verb", "adjective", "adverb", "prefix", "numbers", etc.. Names and other words will be categorized with "undefined".
 
 Additional to this Process, the AI is also collecting similar words and phrases and saves them as tags.
 These tags can be used to understand sentences by comparing each word's tags with another to determine the list the top mutual tags.
