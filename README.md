@@ -20,7 +20,7 @@ If an article ends, it is using a random, already collected noun from it's datab
 This Process is repeated infinitly and already builds up a big database in a few hours. 
 
 ## Sorting words by type of speech
-Everytime, a new word is found, it is searched up on a [dictionary]https://www.ldoceonline.com/dictionary/), which shows the available types.
+Everytime, a new word is found, it is searched up on a [dictionary](https://www.ldoceonline.com/dictionary/), which shows the available types.
 Then, every word is sorted by "noun", "verb", "adjective" or "adverb". Names and other words will be categorized with "undefined".
 
 Additional to this Process, the AI is also collecting similar words and phrases and saves them as tags.
