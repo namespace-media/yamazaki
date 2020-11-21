@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import org.json.simple.parser.ParseException;
 
 import javax.security.auth.login.LoginException;
+import java.io.Console;
 import java.io.IOException;
 
 public class Main {
@@ -26,12 +27,15 @@ public class Main {
 
     public static void main(String[] args) throws LoginException, IOException, ParseException {
 
+
+
+
         Config.init();
         SaveTypeOfSpeech.init();
 
-        BadCount.init();
-        NeutralCount.init();
-        Messages.init();
+//        NeutralCount.init();
+//        Messages.init();
+//        BadCount.init();
 
         JSONWordsDatabase.InitialJsonStuff.init();
 
@@ -43,12 +47,13 @@ public class Main {
 
         builder.setToken(Config.load("token"));
 
-        builder.addEventListeners(new Ready(), new RateMessage(), new CommandListener(), new SentenceListener());
+        builder.addEventListeners(new Ready(), new RateMessage(), new CommandListener()/*, new SentenceListener()*/);
 
         builder.build();
 
         Commands();
-        WordCrawler.beginCatchingWords("http://namespace.media/");
+//        WordCrawler.beginCatchingWords("http://namespace.media/");
+        WordCrawler.beginCatchingWords("");
 
 
     }

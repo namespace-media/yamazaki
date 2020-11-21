@@ -46,40 +46,31 @@ public class RateMessage extends ListenerAdapter {
 //        if(event.getTextChannel().getId().contains(Config.load("channel"))) {
 //        }
         event.getMessage().addReaction("✅").and(event.getMessage().addReaction("❌")).queue();
-
-        Messages.save(event.getMessageId(), event.getMessage().getEmbeds().get(0).getFooter().getText());
     }
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-
-        try {
-        if(!event.getMember().getUser().isBot()) {
+        if(!event.getMember().getUser().isBot() || event.retrieveMessage().complete().getEmbeds().size() != 1)
             if (event.getReactionEmote().getName().contains("❌")) {
 
-                String[] upvoted = Messages.load(event.getMessageId()).split(" ");
+                String[] voted = event.retrieveMessage().complete().getEmbeds().get(0).getFooter().getText().split(" ");
 
-                for (int i = 0; i < upvoted.length; i++) {
+                for (int i = 0; i < voted.length; i++) {
 //                    NeutralCount.save(upvoted[i], Rating.addNeutralScore(upvoted[i]));
-                    JSONWordsDatabase.WordDetails.WordRating.RateWord(upvoted[i].toLowerCase(), false);
+                    JSONWordsDatabase.WordDetails.WordRating.RateWord(voted[i].toLowerCase(), false);
                 }
 
-                WordSender.sendWord(event);
+//                WordSender.sendWord(event);
             } else if (event.getReactionEmote().getName().contains("✅")) {
 
-                String[] downvoted = Messages.load(event.getMessageId()).split(" ");
+                String[] voted = event.retrieveMessage().complete().getEmbeds().get(0).getFooter().getText().split(" ");
 
-                for (int i = 0; i < downvoted.length; i++) {
+                for (int i = 0; i < voted.length; i++) {
 //                    BadCount.save(downvoted[i], Rating.addBadScore(downvoted[i]));
-                    JSONWordsDatabase.WordDetails.WordRating.RateWord(downvoted[i].toLowerCase(), true);
+                    JSONWordsDatabase.WordDetails.WordRating.RateWord(voted[i].toLowerCase(), true);
                 }
 
-                WordSender.sendWord(event);
+//                WordSender.sendWord(event);
             }
-        }
-        }catch (Exception e) {
-            return;
-        }
-
     }
 }

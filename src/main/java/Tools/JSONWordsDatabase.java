@@ -6,6 +6,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class JSONWordsDatabase {
 
@@ -22,16 +24,32 @@ public class JSONWordsDatabase {
             }
             JSONParser parser = new JSONParser();
             try (Reader reader = new FileReader(fileLocation)) {
+                System.out.println("[INFO] Preparing Database file for being loaded into Memory...");
 
                 generalJO = (JSONObject) parser.parse(reader);
-                SaveToFile();
+                System.out.println("[SUCCESS] Database file successfully loaded into Memory!");
+//                SaveToFile();
+
+                Timer timer = new Timer();
+                TimerTask task = new BackUpWordsDatabase();
+
+                timer.schedule(task, 60000, 300000);
 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ParseException e) {
-                System.out.println("Error: words JSON corrupted or not created. Creating...");
+                System.out.println("[ERROR] Words Database corrupted or not created. Creating...");
                 CreateSaveFile();
 //                e.printStackTrace();
+            }
+        }
+
+        private static class BackUpWordsDatabase extends TimerTask {
+            public static int i = 0;
+
+            public void run() {
+                System.out.println("[INFO] Preparing backup of Database...");
+                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
         }
 
@@ -49,6 +67,7 @@ public class JSONWordsDatabase {
             try (FileWriter file = new FileWriter(fileLocation)) {
                 file.write(generalJO.toJSONString());
                 file.flush();
+                System.out.println("[SUCCESS] Saved Database!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -105,9 +124,23 @@ public class JSONWordsDatabase {
                 generalJO.put("details", detailsOBJ);
 
 
-                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
+//                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
 
-                System.out.println("Registered Word! | " + useWord + "  ->   " + useTOS);
+//                System.out.println("Registered Word! | " + useWord + "  ->   " + useTOS);
+
+                if(!lastRegisteredWord.equalsIgnoreCase(useWord)){
+                    System.out.println();
+                    System.out.format("%14s %15s %20s", "              ", "Word", "ToS");
+                    System.out.println();
+                }
+                System.out.format("%14s %15s %20s", "Registered ToS", useWord, useTOS);
+                    System.out.println();
+
+//
+//                System.out.printf("%40s %20s", "Word", "Type Of Speech");
+//                System.out.println();
+//                System.out.printf("%5s %15s %20s", "[SYSTEM] Registered Word!", useWord, useTOS);
+//                System.out.printf("%10s %30s %20s %5s %5s", "STUDENT ID", "EMAIL ID", "NAME", "AGE", "GRADE");
                 lastRegisteredWord = useWord;
             }
         }
@@ -130,7 +163,7 @@ public class JSONWordsDatabase {
                 detailsContentOBJ.put("tags", new JSONArray());
                 detailsOBJ.put(word.toLowerCase(), detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
-                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
+//                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
             return detailsContentOBJ;
         }
@@ -161,7 +194,7 @@ public class JSONWordsDatabase {
 
                 detailsOBJ.put(word.toLowerCase(), detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
-                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
+//                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
 
             public static long GetWordsRating(String word) {
@@ -176,9 +209,8 @@ public class JSONWordsDatabase {
                     System.out.println("overall - " + overall);
 
 
-
                     if (overall == 0)
-                        return 0;
+                        return 50;
 
                     if (bad == 0 && neutral > 0)
                         return 0;
@@ -203,7 +235,7 @@ public class JSONWordsDatabase {
             public static void RegisterWordsTag(String word, String tag) {
                 if (generalJO.get("details") == null)
                     return;
-                if(AlreadyGotTag(word, tag))
+                if (AlreadyGotTag(word, tag))
                     return;
                 JSONObject detailsOBJ;
                 JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
@@ -213,7 +245,7 @@ public class JSONWordsDatabase {
 
                 detailsOBJ.put(word.toLowerCase(), detailsContentOBJ);
                 generalJO.put("details", detailsOBJ);
-                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
+//                JSONWordsDatabase.InitialJsonStuff.SaveToFile();
             }
 
             public static JSONArray GetWordsTags(String word) {
@@ -221,7 +253,7 @@ public class JSONWordsDatabase {
                     detailsContentOBJ = GetDetailsContent(word);
                     JSONArray tagsArray = (JSONArray) detailsContentOBJ.get("tags");
 
-                    if(tagsArray == null)
+                    if (tagsArray == null)
                         return new JSONArray();
 
                     return tagsArray;
