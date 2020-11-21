@@ -21,7 +21,10 @@ public class WebsiteTools {
     }
 
     public static List<String> GetElementsByClass(String url, String classS) throws IOException {
-        Elements links = getDoc(url).getElementsByClass(classS);
+        Document doc = getDoc(url);
+        if (doc == null)
+            return new ArrayList<String>();
+        Elements links = doc.getElementsByClass(classS);
         List<String> wordsList = new ArrayList<String>();
         for (Element link : links) {
             wordsList.add(link.text());
@@ -30,7 +33,10 @@ public class WebsiteTools {
     }
 
     public static List<String> GetElementsByTag(String url, String tag) throws IOException {
-        Elements links = getDoc(url).getElementsByTag(tag);
+        Document doc = getDoc(url);
+        if (doc == null)
+            return new ArrayList<String>();
+        Elements links = doc.getElementsByTag(tag);
         List<String> wordsList = new ArrayList<String>();
         for (Element link : links) {
             wordsList.add(link.text());
@@ -40,7 +46,10 @@ public class WebsiteTools {
 
     public static List<String> GetElementsByCSSQ(String url, String cssQ) {
         try {
-            Elements links = getDoc(url).select(cssQ);
+            Document doc = getDoc(url);
+            if (doc == null)
+                return new ArrayList<String>();
+            Elements links = doc.select(cssQ);
             List<String> wordsList = new ArrayList<String>();
             for (Element link : links) {
                 wordsList.add(link.text());
@@ -51,7 +60,10 @@ public class WebsiteTools {
         }
     }
     public static List<String> getRawTagsOfURL(String url, String tag) throws IOException {
-        Elements links = getDoc(url).getElementsByTag(tag);
+        Document doc = getDoc(url);
+        if (doc == null)
+            return new ArrayList<String>();
+        Elements links = doc.getElementsByTag(tag);
         List<String> wordsList = new ArrayList<String>();
         for (Element link : links) {
             wordsList.add(link.toString());

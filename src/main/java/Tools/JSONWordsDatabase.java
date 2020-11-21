@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,7 +34,8 @@ public class JSONWordsDatabase {
                 Timer timer = new Timer();
                 TimerTask task = new BackUpWordsDatabase();
 
-                timer.schedule(task, 60000, 300000);
+//                timer.schedule(task, 60000, 300000);
+                timer.schedule(task, 60000, 1800000);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -48,14 +50,15 @@ public class JSONWordsDatabase {
             public static int i = 0;
 
             public void run() {
-                System.out.println("[INFO] Preparing backup of Database...");
+                System.out.println("[INFO] [" + i + "] Preparing backup of Database...");
                 JSONWordsDatabase.InitialJsonStuff.SaveToFile();
+                i++;
             }
         }
 
         private static void CreateSaveFile() {
             if (fileLocation.exists()) {
-                System.out.println("Info: words JSON file existed, backing up...");
+                System.out.println("[INFO] Database file existed, backing up...");
                 fileLocation.renameTo(new File(fileLocation.getName() + "_backedup"));
             }
             generalJO = new JSONObject();
@@ -63,13 +66,22 @@ public class JSONWordsDatabase {
             init();
         }
 
-        protected static void SaveToFile() {
+        public static void SaveToFile() {
             try (FileWriter file = new FileWriter(fileLocation)) {
-                file.write(generalJO.toJSONString());
+                JSONObject use = generalJO;
+                file.write(use.toJSONString());
                 file.flush();
                 System.out.println("[SUCCESS] Saved Database!");
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (ConcurrentModificationException ex) {
+                try {
+                    Thread.sleep(5000);
+                    SaveToFile();
+                    return;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

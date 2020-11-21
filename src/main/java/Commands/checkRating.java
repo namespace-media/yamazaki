@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
 
-public class checkRating implements Command {
+public class    checkRating implements Command {
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -16,7 +16,6 @@ public class checkRating implements Command {
     public void action(String[] args, MessageReceivedEvent event) {
         if (args.length > 0) {
             String word = args[0];
-
 
             double rating = JSONWordsDatabase.WordDetails.WordRating.GetWordsRating(word);
             System.out.println("rating - " + rating);
