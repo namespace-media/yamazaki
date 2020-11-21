@@ -3,6 +3,7 @@ package Listeners;
 import Database.*;
 import Frontend.WordSender;
 import Tools.JSONWordsDatabase;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -34,6 +35,8 @@ public class RateMessage extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if(event.getMessage().getEmbeds().size() != 1 || event.getMember().getUser() != event.getJDA().getSelfUser())
             return;
+        if(event.getMessage().getEmbeds().get(0).getFields().size() == 0)
+            return;
 
         String[] words = event.getMessage().getEmbeds().get(0).getFooter().getText().split(" ");
 
@@ -50,10 +53,14 @@ public class RateMessage extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        if(!event.getMember().getUser().isBot() || event.retrieveMessage().complete().getEmbeds().size() != 1)
+        Message msg = event.retrieveMessage().complete();
+        if(!event.getMember().getUser().isBot() || msg.getEmbeds().size() != 1) {
+
+            if (msg.getEmbeds().get(0).getFields().size() == 0)
+                return;
             if (event.getReactionEmote().getName().contains("❌")) {
 
-                String[] voted = event.retrieveMessage().complete().getEmbeds().get(0).getFooter().getText().split(" ");
+                String[] voted = msg.getEmbeds().get(0).getFooter().getText().split(" ");
 
                 for (int i = 0; i < voted.length; i++) {
 //                    NeutralCount.save(upvoted[i], Rating.addNeutralScore(upvoted[i]));
@@ -63,7 +70,7 @@ public class RateMessage extends ListenerAdapter {
 //                WordSender.sendWord(event);
             } else if (event.getReactionEmote().getName().contains("✅")) {
 
-                String[] voted = event.retrieveMessage().complete().getEmbeds().get(0).getFooter().getText().split(" ");
+                String[] voted = msg.getEmbeds().get(0).getFooter().getText().split(" ");
 
                 for (int i = 0; i < voted.length; i++) {
 //                    BadCount.save(downvoted[i], Rating.addBadScore(downvoted[i]));
@@ -72,5 +79,6 @@ public class RateMessage extends ListenerAdapter {
 
 //                WordSender.sendWord(event);
             }
+        }
     }
 }

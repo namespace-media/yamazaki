@@ -9,10 +9,15 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class WordCrawler {
+
+    private static boolean stopCrawler = false;
+    private static boolean restartCrawler = false;
+    private static String restartCrawlerURL = "";
 
     // Interface
     public static void beginCatchingWords(String url) throws IOException {
@@ -21,16 +26,30 @@ public class WordCrawler {
         }
         List<String> words = gatherWebsiteWords(url);
         int size = words.size();
-        System.out.println("Beginning to catch words at: " + url);
+        System.out.println("[INFO] Beginning to crawl for words at: " + url + "\n" +
+                "[INFO] URL contains " + size + " words to catch...");
 
         for (int i = 0; i < size; i++) {
+            if(stopCrawler) {
+                System.out.println("[WARNING] Crawler has been manually stopped!");
+                stopCrawler = false;
+                break;
+            }
+            if(restartCrawler) {
+                System.out.println("[WARNING] Crawler has been manually restarted!");
+                restartCrawler = false;
+                beginCatchingWords(restartCrawlerURL);
+                break;
+            }
             if ((i + 1) == words.size()) {
                 i = 0;
                 String word = JSONWordsDatabase.lastRegisteredWord;
                 if (word.equalsIgnoreCase("")) {
                     System.out.println("[WARNING] Last word has been empty! Choosing a random Word...");
+                    beginCatchingWords(getRandomWiki());
+                } else {
+                    beginCatchingWords(getWordWiki(word));
                 }
-                beginCatchingWords(getRandomWiki());
                 break;
             }
             if (!words.get(i).equalsIgnoreCase(""))
@@ -38,24 +57,54 @@ public class WordCrawler {
         }
     }
 
+    public static void stopCatchingWords() throws IOException {
+        stopCrawler = true;
+    }
+
+    public static void changeCatchingWordsURL(String url) throws IOException {
+        restartCrawlerURL = url;
+        System.out.println("[INFO] Crawler-URL has been changed to " + url);
+        restartCrawler = true;
+    }
+
+    public static String changeCatchingWordsURLWiki(String word) throws IOException {
+        String url = getWordWiki(word);
+        changeCatchingWordsURL(url);
+        return url;
+    }
+
 
     // Tools
 
-    private static String getRandomWiki() {
+    public static String getRandomWiki() {
         JSONArray nounsArray = JSONWordsDatabase.WordRegister.GetRegisteredArray("noun");
+        if (nounsArray == null)
+            return "https://namespace.media/";
+
         int rnd = new Random().nextInt(nounsArray.size());
         return "https://en.wikipedia.org/wiki/" + nounsArray.get(rnd);
     }
 
+    public static String getWordWiki(String word) {
+        return "https://en.wikipedia.org/wiki/" + word;
+    }
+
     private static List<String> gatherWebsiteWords(String url) throws IOException {
         Document doc = WebsiteTools.getDoc(url);
-        String allText = doc.text();
-        String[] splitText = allText.split("[^A-Za-z0-9][\\s]*");
-        List<String> allWords = new ArrayList<String>();
-        for (int i = 0; i < splitText.length; i++) {
-            allWords.add(splitText[i].replaceAll("[^A-Za-z]", ""));
+        try {
+            if (doc == null) {
+                return new ArrayList<>();
+            }
+            String allText = doc.text();
+            String[] splitText = allText.split("[^A-Za-z0-9][\\s]*");
+            List<String> allWords = new ArrayList<String>();
+            for (int i = 0; i < splitText.length; i++) {
+                allWords.add(splitText[i].replaceAll("[^A-Za-z]", ""));
+            }
+            return allWords;
+        } catch (NullPointerException e) {
+            return new ArrayList<>();
         }
-        return allWords;
     }
 
 //    private static void declareToS(String word) throws IOException {
@@ -85,7 +134,7 @@ public class WordCrawler {
         List<String> wordsList = WebsiteTools.GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .POS");
         List<String> trademarksList = WebsiteTools.GetElementsByCSSQ("https://www.ldoceonline.com/dictionary/" + word.toLowerCase() + "_2", ".dictentry .REGISTERLAB");
         for (int i = 0; i < trademarksList.size(); i++) {
-            if(trademarksList.get(i).equalsIgnoreCase("trademark"))
+            if (trademarksList.get(i).equalsIgnoreCase("trademark"))
                 wordsList.add(trademarksList.get(i));
         }
         if (wordsList.size() == 0 || wordsList.toString().equalsIgnoreCase("[]")) {
