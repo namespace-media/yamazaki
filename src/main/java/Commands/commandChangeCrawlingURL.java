@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
+
+import static Testing.WordCrawler.gatherWebsiteWords;
 
 public class commandChangeCrawlingURL implements Command {
     @Override
@@ -22,13 +25,19 @@ public class commandChangeCrawlingURL implements Command {
             String url = event.getMessage().getContentRaw().replace(Config.load("prefix") + "crawl ", "");
             try {
                 System.out.println("[INFO] [COMMAND - CRAWL] URL = " + url);
-                if (url.startsWith("https://")) {
+                if (url.startsWith("https://") || url.startsWith("http://")) {
                     System.out.println("[INFO] New url has https://!");
-                    event.getTextChannel().sendMessage(new EmbedBuilder().setDescription("✅ Manual override successful.").setColor(Color.green).setFooter(url).build()).queue();
+
                     WordCrawler.changeCatchingWordsURL(url);
+
+                    List<String> words = gatherWebsiteWords(url);
+                    int size = words.size();
+
+                    event.getTextChannel().sendMessage(new EmbedBuilder().setDescription("✅ Manual override successful. Going through " + size + " Words.").setColor(Color.green).setFooter(url).build()).queue();
                 } else {
                     event.getTextChannel().sendMessage(new EmbedBuilder().setDescription("✅ Manual override successful.").setColor(Color.green).setFooter(WordCrawler.changeCatchingWordsURLWiki(args[0])).build()).queue();
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

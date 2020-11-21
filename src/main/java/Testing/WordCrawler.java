@@ -89,7 +89,7 @@ public class WordCrawler {
         return "https://en.wikipedia.org/wiki/" + word;
     }
 
-    private static List<String> gatherWebsiteWords(String url) throws IOException {
+    public static List<String> gatherWebsiteWords(String url) throws IOException {
         Document doc = WebsiteTools.getDoc(url);
         try {
             if (doc == null) {
