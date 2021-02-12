@@ -1,5 +1,5 @@
 # Atsuko
-Atsuko is an AI Java Project originally forked from [shinixsensei-dev/yamazaki](https://github.com/shinixsensei-dev/yamazaki).
+Atsuko is an AI Java Project originally forked from [angelsflyinhell/yamazaki](https://github.com/angelsflyinhell/yamazaki).
 It's main purpose is, to learn basic english language and to build logic sentences to be able to hold a conversation with a real human being.
 
 # Research
